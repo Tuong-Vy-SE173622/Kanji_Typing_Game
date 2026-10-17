@@ -1,0 +1,70 @@
+import { Component, inject } from '@angular/core';
+import { AutoFocusDirective } from '../shared/auto-focus.directive';
+import { GameService, MAX_FAILS } from '../shared/game.service';
+
+/** Shown each time a word reaches the floor; the 3rd fail is the real game over. */
+@Component({
+  selector: 'app-game-over-dialog',
+  imports: [AutoFocusDirective],
+  template: `
+    @if (game.current(); as word) {
+      <div class="backdrop">
+        <div
+          class="w-90 rounded-lg border-2 bg-panel p-6 text-center"
+          [class.border-danger]="game.outOfLives()"
+          [class.border-warn]="!game.outOfLives()"
+        >
+          @if (game.outOfLives()) {
+            <h3 class="mb-1.5 text-[1.375rem] font-bold text-danger">GAME OVER!</h3>
+            <div class="mb-4.5 text-[0.8125rem] text-muted">
+              Bạn đã sai {{ maxFails }} lần.
+              <span class="mt-1 block text-danger">Session sẽ bắt đầu lại từ đầu.</span>
+            </div>
+          } @else {
+            <h3 class="mb-1.5 text-[1.375rem] font-bold text-warn">SAI RỒI!</h3>
+            <div class="mb-4.5 text-[0.8125rem] text-muted">
+              Từ đã rơi xuống đáy.
+              <span class="mt-1 block text-warn">
+                Bạn còn {{ game.livesLeft() }} lượt — sai {{ maxFails }} lần sẽ phải chơi lại
+                session.
+              </span>
+            </div>
+          }
+
+          <div class="mb-4.5 rounded-md border border-line bg-canvas p-3.5 text-left">
+            <div class="flex items-center gap-2.5 py-1">
+              <span class="w-22.5 shrink-0 text-muted">Kanji:</span>
+              <span class="text-[1.375rem] font-bold text-enemy">{{ word.kanji }}</span>
+            </div>
+            <div class="flex items-center gap-2.5 py-1">
+              <span class="w-22.5 shrink-0 text-muted">Yomikata:</span>
+              <span class="text-lg text-accent">{{ word.yomikata }}</span>
+              <button
+                title="Nghe phát âm"
+                (click)="game.speak(word.yomikata); retryBtn.focus()"
+                class="ml-1 size-7.5 cursor-pointer rounded-full border border-line p-0 text-[0.9375rem] leading-none hover:border-accent hover:bg-raised"
+              >
+                🔊
+              </button>
+            </div>
+            <div class="flex gap-2.5 py-1">
+              <span class="w-22.5 shrink-0 text-muted">Nghĩa:</span>
+              <span class="text-fg">{{ word.meaning }}</span>
+            </div>
+          </div>
+
+          <div class="flex justify-center gap-2.5">
+            <button #retryBtn appAutoFocus (click)="game.retry()" class="btn-primary">
+              {{ game.outOfLives() ? 'Chơi lại session' : 'Thử lại' }} (Enter)
+            </button>
+            <button (click)="game.goHome()" class="btn-secondary">Về Home</button>
+          </div>
+        </div>
+      </div>
+    }
+  `,
+})
+export class GameOverDialog {
+  protected readonly game = inject(GameService);
+  protected readonly maxFails = MAX_FAILS;
+}

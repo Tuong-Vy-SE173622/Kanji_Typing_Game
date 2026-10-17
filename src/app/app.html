@@ -1,0 +1,13 @@
+@switch (game.phase()) {
+  @case ('home') {
+    <app-home />
+  }
+  @case ('over') {
+    <app-game-over-dialog />
+  }
+  @case ('complete') {
+    <app-session-complete-dialog />
+  }
+}
+
+<app-game-board />

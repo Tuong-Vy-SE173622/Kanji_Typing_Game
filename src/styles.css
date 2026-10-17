@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+
+/* Palette from the original typing_game.html (GitHub dark) */
+@theme {
+  --color-canvas: #0d1117;
+  --color-panel: #161b22;
+  --color-raised: #21262d;
+  --color-line: #30363d;
+  --color-fg: #c9d1d9;
+  --color-muted: #8b949e;
+  --color-accent: #58a6ff;
+  --color-enemy: #ff7b72;
+  --color-danger: #f85149;
+  --color-warn: #d29922;
+  --color-success: #3fb950;
+  --color-btn: #238636;
+  --color-btn-hover: #2ea043;
+  --color-backdrop: rgb(1 4 9 / 0.75);
+}
+
+html {
+  /* UI scale: every size is in rem, so this one value scales the whole app (150% = 1.5x) */
+  font-size: 150%;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+}
+
+@layer components {
+  .backdrop {
+    @apply fixed inset-0 z-10 flex items-center justify-center overflow-y-auto bg-backdrop p-4;
+  }
+
+  .btn-primary {
+    @apply cursor-pointer rounded-md bg-btn px-5 py-2.5 text-[0.9375rem] text-white hover:bg-btn-hover;
+  }
+
+  .btn-secondary {
+    @apply cursor-pointer rounded-md border border-line bg-raised px-5 py-2.5 text-[0.9375rem] text-fg hover:border-accent;
+  }
+
+  .field-select {
+    @apply cursor-pointer rounded-md border border-line bg-panel px-2.5 py-2 text-base text-fg hover:border-accent focus:border-accent focus:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
