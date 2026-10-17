@@ -12,48 +12,7 @@ import { GameService, MAX_FAILS } from '../shared/game.service';
 
 @Component({
   selector: 'app-game-board',
-  template: `
-    <h2 class="my-5 text-2xl font-bold">KANJI TYPING</h2>
-
-    <div class="mb-2 flex w-125 items-center justify-between text-sm text-muted">
-      <span>
-        Tiến độ: <b class="text-accent">{{ game.index() }}</b> /
-        <b class="text-accent">{{ game.total() }}</b>
-      </span>
-      <span>
-        Lỗi: <b class="text-danger">{{ game.fails() }}</b> /
-        <b class="text-danger">{{ maxFails }}</b>
-      </span>
-      <button
-        (click)="game.goHome()"
-        class="cursor-pointer rounded-md border border-line px-2.5 py-1 text-muted hover:border-accent hover:text-fg"
-      >
-        ⌂ Home
-      </button>
-    </div>
-
-    <div class="relative h-87.5 w-125 overflow-hidden rounded-lg border-2 border-line bg-panel">
-      @if (game.phase() === 'playing' && game.current(); as word) {
-        <div
-          class="absolute left-30 max-w-90 rounded border border-line bg-raised px-3 py-1 text-2xl font-bold text-enemy"
-          [style.top.rem]="game.posY()"
-        >
-          {{ word[game.mode().question] }}
-        </div>
-      }
-    </div>
-
-    <input
-      #answer
-      type="text"
-      placeholder="Gõ Yomikata rồi ấn Enter..."
-      [disabled]="game.phase() !== 'playing'"
-      (keydown.enter)="submit($event, answer)"
-      class="mt-3.75 w-120 rounded-md border bg-canvas p-2.5 text-center text-lg text-accent outline-none transition-colors"
-      [class.border-danger]="wrong()"
-      [class.border-line]="!wrong()"
-    />
-  `,
+  templateUrl: './game-board.html',
   host: { class: 'flex flex-col items-center' },
 })
 export class GameBoard {
