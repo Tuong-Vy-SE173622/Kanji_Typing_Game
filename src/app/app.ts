@@ -9,7 +9,7 @@ import { GameService } from './shared/game.service';
   selector: 'app-root',
   imports: [Home, GameBoard, GameOverDialog, SessionCompleteDialog],
   templateUrl: './app.html',
-  host: { class: 'flex min-h-screen flex-col items-center justify-center py-4' },
+  host: { class: 'flex min-h-dvh flex-col items-center justify-center p-4' },
 })
 export class App {
   protected readonly game = inject(GameService);

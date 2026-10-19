@@ -13,7 +13,7 @@ import { GameService, MAX_FAILS } from '../shared/game.service';
 @Component({
   selector: 'app-game-board',
   templateUrl: './game-board.html',
-  host: { class: 'flex flex-col items-center' },
+  host: { class: 'flex w-full flex-col items-center' },
 })
 export class GameBoard {
   protected readonly game = inject(GameService);

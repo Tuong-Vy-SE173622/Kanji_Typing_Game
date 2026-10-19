@@ -1,11 +1,13 @@
 <div class="backdrop">
-  <div class="w-180 rounded-lg border-2 border-success bg-panel p-6 text-center">
+  <div class="w-full max-w-180 rounded-lg border-2 border-success bg-panel p-4 sm:p-6 text-center">
     <h3 class="mb-1.5 text-[1.375rem] font-bold text-success">🎉 CONGRATULATIONS!</h3>
     <div class="mb-4.5 text-[0.8125rem] text-muted">
       Bạn đã hoàn thành session {{ game.total() }} từ.
     </div>
 
-    <div class="mb-4.5 max-h-75 overflow-y-auto rounded-md border border-line bg-canvas">
+    <div
+      class="mb-4.5 max-h-[min(18.75rem,50dvh)] overflow-auto rounded-md border border-line bg-canvas"
+    >
       <table class="w-full border-collapse text-left text-sm">
         <thead>
           <tr>
@@ -32,7 +34,7 @@
       </table>
     </div>
 
-    <div class="flex justify-center gap-2.5">
+    <div class="flex flex-wrap justify-center gap-2.5">
       <button #nextBtn appAutoFocus (click)="game.nextSession()" class="btn-primary">
         Session tiếp theo (Enter)
       </button>

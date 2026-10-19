@@ -18,9 +18,27 @@
   --color-backdrop: rgb(1 4 9 / 0.75);
 }
 
+/* UI scale: every size is in rem, so this one value scales the whole app (150% = 1.5x) */
 html {
-  /* UI scale: every size is in rem, so this one value scales the whole app (150% = 1.5x) */
-  font-size: 150%;
+  font-size: 100%; /* mobile */
+}
+
+@media (min-width: 640px) {
+  html {
+    font-size: 112.5%; /* tablet */
+  }
+}
+
+@media (min-width: 1024px) and (min-height: 600px) {
+  html {
+    font-size: 125%; /* laptop */
+  }
+}
+
+@media (min-width: 1536px) and (min-height: 860px) {
+  html {
+    font-size: 150%; /* desktop PC */
+  }
 }
 
 html,
@@ -34,7 +52,7 @@ body {
 
 @layer components {
   .backdrop {
-    @apply fixed inset-0 z-10 flex items-center justify-center overflow-y-auto bg-backdrop p-4;
+    @apply fixed inset-0 z-10 flex items-center-safe justify-center overflow-y-auto bg-backdrop p-4;
   }
 
   .btn-primary {

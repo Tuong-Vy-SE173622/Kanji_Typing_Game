@@ -20,10 +20,10 @@ export const SESSION_MODES: SessionMode[] = [
   { id: 'meaning', label: 'Meaning → Yomikana', question: 'meaning', answer: 'yomikata' },
 ];
 
-// Positions are in rem so the fall scales with the UI (see html font-size in styles.css)
+// The fall is tracked as progress (0 = top, 1 = floor) so the board can be any height
 const TICK_MS = 30;
-const SPEED = 0.05; // rem per tick
-const FLOOR_Y = 18.75; // rem — the word "hits the floor" past this top offset
+const FALL_MS = 11250; // time for a word to reach the floor
+const SPEED = TICK_MS / FALL_MS; // progress per tick
 export const MAX_FAILS = 3;
 
 function shuffle<T>(arr: readonly T[]): T[] {
@@ -57,7 +57,7 @@ export class GameService {
 
   readonly sessionWords = signal<Vocab[]>([]); // unique random words for this session
   readonly index = signal(0); // index of the current word
-  readonly posY = signal(0);
+  readonly progress = signal(0); // fall of the current word, 0..1
   readonly fails = signal(0); // words that reached the floor this session
 
   readonly current = computed<Vocab | undefined>(() => this.sessionWords()[this.index()]);
@@ -153,14 +153,14 @@ export class GameService {
 
   private spawn(): void {
     this.stop();
-    this.posY.set(0);
+    this.progress.set(0);
     this.phase.set('playing');
     this.timer = setInterval(() => this.tick(), TICK_MS);
   }
 
   private tick(): void {
-    this.posY.update((y) => y + SPEED);
-    if (this.posY() <= FLOOR_Y) return;
+    this.progress.update((p) => p + SPEED);
+    if (this.progress() <= 1) return;
     this.stop();
     this.fails.update((f) => f + 1);
     this.phase.set('over');
