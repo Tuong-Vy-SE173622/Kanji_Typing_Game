@@ -4,9 +4,11 @@ import { SpeechService } from './speech.service';
 import { Vocab } from './vocab';
 import { parseVocabList } from './vocab-import';
 
-export type Phase = 'home' | 'playing' | 'over' | 'complete';
+// 'menu' = game picker, 'home' = vocabulary game setup
+export type Phase = 'menu' | 'home' | 'playing' | 'over' | 'complete';
 
-export const SESSION_SIZES = [5, 10, 20] as const;
+export const SESSION_SIZES = [ALL, 5, 10, 20] as const;
+export type SessionSize = (typeof SESSION_SIZES)[number]; // ALL = every word in the pool
 
 export interface SessionMode {
   id: string;
@@ -40,8 +42,8 @@ export class GameService {
   private readonly speech = inject(SpeechService);
   private timer: ReturnType<typeof setInterval> | undefined;
 
-  readonly phase = signal<Phase>('home');
-  readonly sessionSize = signal(10);
+  readonly phase = signal<Phase>('menu');
+  readonly sessionSize = signal<SessionSize>(10);
   readonly mode = signal(SESSION_MODES[0]);
 
   // Home filters (values are strings to match <select> values)
@@ -65,11 +67,12 @@ export class GameService {
   readonly livesLeft = computed(() => Math.max(0, MAX_FAILS - this.fails()));
   readonly outOfLives = computed(() => this.livesLeft() === 0);
 
-  startSession(size: number): void {
+  startSession(size: SessionSize): void {
     this.sessionSize.set(size);
     const pool = this.importMode() ? this.importedWords() : this.pool();
     if (pool.length === 0) return;
-    this.beginSession(shuffle(pool).slice(0, size));
+    const words = shuffle(pool);
+    this.beginSession(size === ALL ? words : words.slice(0, size));
   }
 
   setImportText(text: string): void {
@@ -121,6 +124,11 @@ export class GameService {
     this.stop();
     this.speech.cancel();
     this.phase.set('home');
+  }
+
+  goMenu(): void {
+    this.goHome();
+    this.phase.set('menu');
   }
 
   /** Returns true when the answer was correct. */

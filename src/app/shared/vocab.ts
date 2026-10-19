@@ -22,7 +22,7 @@ export const LEVEL_N5_DATA: Lesson[] = [
         partId: 'A',
         vocabList: [
           { kanji: '箸', yomikata: 'はし', meaning: 'đũa' },
-          { kanji: '故郷', yomikata: 'こきょう', meaning: 'quê, quê hương' },
+          { kanji: '故郷', yomikata: 'こきょう・ふるさと', meaning: 'quê, quê hương' },
           { kanji: '電車', yomikata: 'でんしゃ', meaning: 'tàu điện' },
           { kanji: '銭湯', yomikata: 'せんとう', meaning: 'nhà tắm công cộng' },
           { kanji: 'こと', yomikata: 'こと', meaning: 'việc' },

@@ -1,6 +1,9 @@
 @switch (game.phase()) {
-  @case ('home') {
+  @case ('menu') {
     <app-home />
+  }
+  @case ('home') {
+    <app-home-vocabulary-typing-game />
   }
   @case ('over') {
     <app-game-over-dialog />
