@@ -1,19 +1,19 @@
-<div
-  class="fixed inset-0 z-20 flex flex-col items-center-safe justify-center-safe overflow-y-auto bg-canvas p-4"
->
+<div class="flex w-full flex-col items-center">
   <h1 class="mb-1.5 text-3xl font-bold text-accent">KANJI TYPING</h1>
   <p class="mb-6 text-sm text-muted">Chọn game:</p>
 
-  <div class="flex w-full max-w-125 flex-col gap-3.5 sm:flex-row">
-    <button
-      appAutoFocus
-      (click)="game.phase.set('home')"
-      class="flex-1 cursor-pointer rounded-lg border-2 border-line bg-panel px-4 py-6 text-fg hover:border-accent focus:border-accent focus:outline-none"
-    >
+  <nav class="flex w-full max-w-125 flex-col gap-3.5 sm:flex-row">
+    <a appAutoFocus routerLink="/vocabulary" class="choice-card flex-1 py-6 text-center">
       <span class="mb-2 block text-4xl font-bold text-enemy">語</span>
-      <b class="block text-lg">Game Từ Vựng</b>
+      <b class="block text-lg text-fg">Game Từ Vựng</b>
       <span class="mt-1 block text-xs text-muted">Gõ Yomikata của từ đang rơi</span>
-    </button>
+    </a>
+
+    <!-- <a routerLink="/verb" class="choice-card flex-1 py-6 text-center">
+      <span class="mb-2 block text-4xl font-bold text-enemy">活</span>
+      <b class="block text-lg text-fg">Game Chia động từ</b>
+      <span class="mt-1 block text-xs text-muted">Chia các thể Masu, Nai, Te, Ta...</span>
+    </a> -->
 
     <button
       disabled
@@ -23,5 +23,5 @@
       <b class="block text-lg">Game Chia động từ</b>
       <span class="mt-1 block text-xs text-muted">Sắp ra mắt</span>
     </button>
-  </div>
+  </nav>
 </div>

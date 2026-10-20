@@ -1,0 +1,117 @@
+<div
+  class="mb-2 flex shrink-0 items-center justify-between gap-2 text-sm text-muted split:col-span-2"
+>
+  <span>
+    Điểm: <b class="text-accent">{{ verb.score() }}</b>
+  </span>
+  <span>
+    Combo: <b class="text-warn">{{ verb.streak() }}</b>
+    <span class="text-xs">(x{{ verb.multiplier() }})</span>
+  </span>
+  @if (verb.playMode() === 'time') {
+    <span>
+      ⏱ <b [class]="verb.timeLeft() <= 10 ? 'text-danger' : 'text-fg'">{{ verb.timeLeft() }}s</b>
+    </span>
+  } @else {
+    <span>
+      Câu: <b class="text-fg">{{ verb.questionNo() }}</b>
+    </span>
+  }
+  <button (click)="verb.end()" class="btn-ghost py-0.5 text-xs" title="Dừng cuộc chơi">
+    ■ Dừng
+  </button>
+</div>
+
+@if (verb.question(); as q) {
+  <div
+    class="relative mb-3 shrink-0 rounded-lg border-2 border-line bg-panel px-3 pt-10 pb-4 text-center sm:mb-4 sm:px-4 sm:pt-12 sm:pb-6 split:col-start-1 split:row-span-2 split:row-start-2 split:mb-0 split:self-start short:pt-8! short:pb-3!"
+  >
+    <span
+      class="absolute top-2.5 left-2.5 rounded-full border border-line bg-raised px-2.5 py-0.5 text-xs text-muted sm:top-3 sm:left-3"
+    >
+      {{ groupName(q) }}
+    </span>
+    <div
+      class="mb-3 inline-block rounded-md bg-raised px-3 py-1 text-xs text-muted sm:mb-4 sm:text-sm"
+    >
+      Chuyển sang: <b class="text-accent">{{ q.form.name }} ({{ q.form.jp }})</b>
+    </div>
+    <div class="mb-1 text-4xl font-bold text-enemy sm:mb-2 sm:text-5xl short:text-4xl!">
+      <app-ruby-text [segments]="q.verb.ruby" />
+    </div>
+    <p class="text-sm text-muted">{{ q.verb.meaning }}</p>
+  </div>
+
+  @if (verb.answerType() === 'choice') {
+    <!-- Landscape phones: once the feedback shows, it replaces the options to save height -->
+    <div
+      class="grid shrink-0 grid-cols-2 gap-2 sm:gap-2.5"
+      [class]="showFeedback() ? 'short:hidden' : ''"
+    >
+      @for (option of q.options; track option; let i = $index) {
+        <button
+          (click)="verb.submit(option)"
+          [disabled]="!!verb.result()"
+          class="answer-option"
+          [class]="optionClass(option, q)"
+        >
+          <span class="text-xs font-normal text-muted">{{ i + 1 }}</span>
+          {{ option }}
+        </button>
+      }
+    </div>
+  } @else if (!verb.result()) {
+    <input
+      #answer
+      appAutoFocus
+      type="text"
+      autocomplete="off"
+      placeholder="Gõ đáp án rồi ấn Enter..."
+      (keydown.enter)="submitText($event, answer)"
+      class="w-full shrink-0 rounded-md border border-line bg-canvas p-2.5 text-center text-lg text-accent outline-none focus:border-accent"
+    />
+  }
+
+  <!-- Feedback panel (see showFeedback) -->
+  @if (verb.result(); as r) {
+    @if (showFeedback()) {
+      <div
+        class="mt-3 shrink-0 rounded-lg border-2 bg-panel p-3 sm:p-4 short:mt-2 short:p-2.5!"
+        [class]="r.correct ? 'border-success' : 'border-danger'"
+      >
+        <h3 class="mb-1 font-bold sm:mb-2" [class]="r.correct ? 'text-success' : 'text-danger'">
+          {{ r.correct ? '✔ Chính xác! (正解)' : '✘ Chưa đúng!' }}
+        </h3>
+        <p class="flex flex-wrap items-center gap-x-2 text-sm text-fg">
+          {{ q.verb.kanji }} → {{ q.form.short }}:
+          <b class="text-lg text-accent">{{ q.answer }}</b>
+          <button
+            title="Nghe phát âm"
+            (click)="verb.speak(q.answer); nextBtn.focus()"
+            class="icon-btn"
+          >
+            🔊
+          </button>
+        </p>
+        @if (!r.correct) {
+          <p class="text-sm text-muted">
+            Bạn trả lời: <s class="text-danger">{{ r.given }}</s>
+          </p>
+        }
+        @if (rule(q); as ruleText) {
+          <p class="mt-1 text-xs whitespace-pre-line text-warn short:whitespace-normal">
+            {{ ruleText }}
+          </p>
+        }
+        <button
+          #nextBtn
+          appAutoFocus
+          (click)="verb.next()"
+          class="btn-primary mt-3 w-full short:mt-2 short:py-2"
+        >
+          Câu tiếp theo (Enter) →
+        </button>
+      </div>
+    }
+  }
+}

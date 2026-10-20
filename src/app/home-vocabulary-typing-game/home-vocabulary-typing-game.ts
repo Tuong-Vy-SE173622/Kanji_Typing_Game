@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AutoFocusDirective } from '../shared/auto-focus.directive';
 import { GameService, SESSION_MODES, SESSION_SIZES } from '../shared/game.service';
 import { ALL, LEVELS } from '../shared/levels';
@@ -6,7 +7,7 @@ import { IMPORT_PLACEHOLDER } from '../shared/vocab-import';
 
 @Component({
   selector: 'app-home-vocabulary-typing-game',
-  imports: [AutoFocusDirective],
+  imports: [AutoFocusDirective, RouterLink],
   templateUrl: './home-vocabulary-typing-game.html',
 })
 export class HomeVocabularyTypingGame {

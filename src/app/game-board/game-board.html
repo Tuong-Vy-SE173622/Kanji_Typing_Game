@@ -1,4 +1,4 @@
-<h2 class="my-3 text-2xl font-bold sm:my-5">KANJI TYPING</h2>
+<h2 class="my-3 text-2xl font-bold sm:my-5 short:hidden">KANJI TYPING</h2>
 
 <div class="mb-2 flex w-full max-w-125 items-center justify-between gap-2 text-sm text-muted">
   <span>
@@ -9,12 +9,7 @@
     Lỗi: <b class="text-danger">{{ game.fails() }}</b> /
     <b class="text-danger">{{ maxFails }}</b>
   </span>
-  <button
-    (click)="game.goHome()"
-    class="cursor-pointer rounded-md border border-line px-2.5 py-1 text-muted hover:border-accent hover:text-fg"
-  >
-    ⌂ Home
-  </button>
+  <button (click)="game.goHome()" class="btn-ghost">⌂ Home</button>
 </div>
 
 <!-- Height shrinks on short screens (e.g. mobile with the keyboard open); the floor sits 3.125rem above the bottom -->

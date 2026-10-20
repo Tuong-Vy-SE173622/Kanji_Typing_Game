@@ -1,0 +1,63 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div
+    class="flex max-h-[90dvh] w-full max-w-215 flex-col rounded-lg border-2 border-accent bg-panel"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-center justify-between gap-2 border-b border-line p-4">
+      <h3 class="font-bold text-accent">📖 Bảng quy tắc chia động từ (動詞活用表)</h3>
+      <button appAutoFocus (click)="closed.emit()" class="btn-ghost" title="Đóng (Esc)">✕</button>
+    </div>
+
+    <div class="overflow-auto p-4">
+      <table class="w-full min-w-150 border-collapse text-left text-sm">
+        <thead>
+          <tr class="bg-raised text-muted">
+            <th class="border border-line px-2 py-1.5 font-normal">Thể</th>
+            <th class="border border-line px-2 py-1.5 font-normal">
+              Nhóm 1 · Godan<br /><span class="text-fg">{{ examples.g1.kanji }}</span>
+            </th>
+            <th class="border border-line px-2 py-1.5 font-normal">
+              Nhóm 2 · Ichidan<br /><span class="text-fg">{{ examples.g2.kanji }}</span>
+            </th>
+            <th class="border border-line px-2 py-1.5 font-normal">
+              Nhóm 3<br /><span class="text-fg">する</span>
+            </th>
+            <th class="border border-line px-2 py-1.5 font-normal">
+              Nhóm 3<br /><span class="text-fg">来る (くる)</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows; track row.form.id) {
+            <tr class="align-top">
+              <td class="border border-line px-2 py-1.5">
+                <b class="text-fg">{{ row.form.name }}</b>
+                <span class="block text-xs text-muted">{{ row.form.jp }}</span>
+              </td>
+              <td class="border border-line px-2 py-1.5">
+                <span class="block text-xs whitespace-pre-line text-muted">{{
+                  row.form.rule.g1
+                }}</span>
+                <b class="whitespace-nowrap text-accent">{{ row.g1 }}</b>
+              </td>
+              <td class="border border-line px-2 py-1.5">
+                <span class="block text-xs text-muted">{{ row.form.rule.g2 }}</span>
+                <b class="whitespace-nowrap text-accent">{{ row.g2 }}</b>
+              </td>
+              <td class="border border-line px-2 py-1.5 font-bold whitespace-nowrap text-accent">
+                {{ row.suru }}
+              </td>
+              <td class="border border-line px-2 py-1.5 font-bold whitespace-nowrap text-accent">
+                {{ row.kuru }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <p class="mt-3 text-xs text-muted">
+        Nhóm 1: đuôi hàng U (う・く・ぐ・す・つ・ぬ・ぶ・む・る). Nhóm 2: đuôi -iru / -eru, bỏ る
+        rồi thêm đuôi. Nhóm 3: する, 来る và các động từ 〜する (勉強する → 勉強します).
+      </p>
+    </div>
+  </div>
+</div>

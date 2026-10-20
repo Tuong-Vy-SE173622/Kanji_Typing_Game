@@ -1,0 +1,127 @@
+<div class="mb-2 text-center sm:mb-4 short:mb-2!">
+  <h1 class="text-2xl font-bold text-accent sm:text-3xl">CHIA ĐỘNG TỪ</h1>
+  <p class="mt-1 hidden text-sm text-muted sm:block short:hidden!">
+    Luyện chia các thể động từ nhóm Godan, Ichidan và Bất quy tắc
+  </p>
+</div>
+
+<div class="mb-2 grid grid-cols-2 gap-2 sm:mb-3 sm:gap-3">
+  <button
+    (click)="verb.playMode.set('practice')"
+    class="choice-card p-3 sm:p-4 short:p-2.5!"
+    [class.selected]="verb.playMode() === 'practice'"
+  >
+    <b class="block text-sm text-fg sm:text-base">📖 Luyện tập</b>
+    <span class="mt-1 block text-xs text-muted short:hidden!">
+      Không giới hạn thời gian, có giải thích sau mỗi câu.
+    </span>
+  </button>
+  <button
+    (click)="verb.playMode.set('time')"
+    class="choice-card p-3 sm:p-4 short:p-2.5!"
+    [class.selected]="verb.playMode() === 'time'"
+  >
+    <b class="block text-sm text-fg sm:text-base">⏱ Thử thách {{ timeLimit }}s</b>
+    <span class="mt-1 block text-xs text-muted short:hidden!">
+      Đúng được cộng giờ và tích luỹ combo.
+    </span>
+  </button>
+</div>
+
+<!-- Landscape phones: this panel fills the right column, everything else stacks on the left -->
+<div
+  class="panel mb-2 space-y-3 p-3 sm:mb-3 sm:p-4 split:col-start-2 split:row-span-4 split:row-start-1 split:mb-0 split:self-center short:space-y-2! short:p-3!"
+>
+  <section>
+    <h2 class="section-title mb-1.5">1. Nhóm động từ</h2>
+    <div class="grid grid-cols-3 gap-2">
+      @for (g of groups; track g.id) {
+        <button
+          (click)="verb.toggleGroup(g.id)"
+          [title]="g.label"
+          class="toggle-chip px-2 text-xs sm:px-3 sm:text-sm short:px-2! short:text-xs!"
+          [class.selected]="verb.groups().has(g.id)"
+        >
+          {{ g.short }}
+        </button>
+      }
+    </div>
+  </section>
+
+  <section>
+    <div class="mb-1.5 flex items-center justify-between">
+      <h2 class="section-title">2. Các thể</h2>
+      <button
+        (click)="verb.selectAllForms()"
+        class="cursor-pointer text-xs text-accent hover:underline"
+      >
+        Chọn tất cả
+      </button>
+    </div>
+    <div class="grid grid-cols-3 gap-2">
+      @for (f of forms; track f.id) {
+        <label
+          [title]="f.name + ' (' + f.jp + ')'"
+          class="toggle-chip flex items-center gap-1 px-2 text-xs sm:gap-1.5 sm:px-3 sm:text-sm short:px-2! short:text-xs!"
+          [class.selected]="verb.forms().has(f.id)"
+        >
+          <input
+            type="checkbox"
+            class="size-3.5 shrink-0 cursor-pointer accent-accent"
+            [checked]="verb.forms().has(f.id)"
+            (change)="verb.toggleForm(f.id)"
+          />
+          <span class="truncate">{{ f.short }}</span>
+        </label>
+      }
+    </div>
+  </section>
+</div>
+
+<div class="panel mb-3 p-3 sm:mb-4 sm:p-4 short:p-3!">
+  <section>
+    <h2 class="section-title mb-1.5">3. Hình thức trả lời</h2>
+    <div class="grid grid-cols-2 gap-2">
+      <label
+        class="toggle-chip flex items-center gap-2"
+        [class.selected]="verb.answerType() === 'choice'"
+      >
+        <input
+          type="radio"
+          name="answer-type"
+          class="size-3.5 shrink-0 cursor-pointer accent-accent"
+          [checked]="verb.answerType() === 'choice'"
+          (change)="verb.answerType.set('choice')"
+        />
+        <span class="min-w-0">
+          <b class="block">Trắc nghiệm</b>
+          <span class="hidden text-xs text-muted sm:block short:hidden!">4 đáp án, phím 1–4</span>
+        </span>
+      </label>
+      <label
+        class="toggle-chip flex items-center gap-2"
+        [class.selected]="verb.answerType() === 'text'"
+      >
+        <input
+          type="radio"
+          name="answer-type"
+          class="size-3.5 shrink-0 cursor-pointer accent-accent"
+          [checked]="verb.answerType() === 'text'"
+          (change)="verb.answerType.set('text')"
+        />
+        <span class="min-w-0">
+          <b class="block">Tự gõ</b>
+          <span class="hidden text-xs text-muted sm:block short:hidden!">Hiragana hoặc Romaji</span>
+        </span>
+      </label>
+    </div>
+  </section>
+</div>
+
+<button
+  appAutoFocus
+  (click)="verb.start()"
+  class="btn-primary w-full shrink-0 py-2.5 text-base font-bold sm:py-3"
+>
+  ▶ BẮT ĐẦU (Enter)
+</button>

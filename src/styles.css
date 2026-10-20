@@ -16,28 +16,41 @@
   --color-btn: #238636;
   --color-btn-hover: #2ea043;
   --color-backdrop: rgb(1 4 9 / 0.75);
+
+  --animate-shake: shake 0.4s ease-in-out;
+  @keyframes shake {
+    20%,
+    60% {
+      transform: translateX(-0.5rem);
+    }
+    40%,
+    80% {
+      transform: translateX(0.5rem);
+    }
+  }
 }
 
-/* UI scale: every size is in rem, so this one value scales the whole app (150% = 1.5x) */
+/*
+ * UI scale: every size is in rem, so this one value scales the whole app.
+ * It follows the viewport's width AND height, so the UI grows as large as the screen allows
+ * without overflowing: 100% on phones / portrait tablets → ~128% at 1024×768
+ * → ~149% at 1366×768 → 200% at 1920×1080 and up.
+ * (Tuned by measuring every screen at 17 viewport sizes; raise with care.)
+ */
 html {
-  font-size: 100%; /* mobile */
+  font-size: clamp(100%, min(2vw, 3.1vh), 200%);
 }
 
-@media (min-width: 640px) {
-  html {
-    font-size: 112.5%; /* tablet */
+/* Landscape phones and other very short screens: `short:` utilities compact the layout */
+@custom-variant short (@media (max-height: 500px));
+
+/* Two-column layouts: wide screens (laptop / desktop) and landscape phones */
+@custom-variant split {
+  @media (min-width: 1024px) {
+    @slot;
   }
-}
-
-@media (min-width: 1024px) and (min-height: 600px) {
-  html {
-    font-size: 125%; /* laptop */
-  }
-}
-
-@media (min-width: 1536px) and (min-height: 860px) {
-  html {
-    font-size: 150%; /* desktop PC */
+  @media (max-height: 500px) {
+    @slot;
   }
 }
 
@@ -61,6 +74,77 @@ body {
 
   .btn-secondary {
     @apply cursor-pointer rounded-md border border-line bg-raised px-5 py-2.5 text-[0.9375rem] text-fg hover:border-accent;
+  }
+
+  /* Small outlined button for toolbars (Home, back, sound, ...) */
+  .btn-ghost {
+    @apply cursor-pointer rounded-md border border-line px-2.5 py-1 text-sm text-muted hover:border-accent hover:text-fg;
+  }
+
+  /* Large selectable card (game mode, ...) */
+  .choice-card {
+    @apply cursor-pointer rounded-lg border-2 border-line bg-panel p-4 text-left hover:border-accent focus:border-accent focus:outline-none;
+    &.selected {
+      @apply border-accent bg-raised;
+    }
+  }
+
+  /* Small selectable option (checkbox / radio / toggle) */
+  .toggle-chip {
+    @apply cursor-pointer rounded-md border border-line bg-canvas px-3 py-1.5 text-sm text-muted hover:border-accent sm:py-2 short:py-1.5!;
+    &.selected {
+      @apply border-accent bg-raised text-fg;
+    }
+  }
+
+  /* Multiple-choice answer; .correct / .wrong / .dimmed once answered */
+  .answer-option {
+    @apply flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-line bg-panel p-2 text-base font-bold text-fg enabled:cursor-pointer enabled:hover:border-accent sm:min-h-14 sm:p-3 sm:text-xl short:min-h-11! short:p-1.5! short:text-lg!;
+    &.correct {
+      @apply border-success text-success;
+    }
+    &.wrong {
+      @apply animate-shake border-danger text-danger;
+    }
+    &.dimmed {
+      @apply opacity-50;
+    }
+  }
+
+  .stat-tile {
+    @apply flex flex-col gap-1 rounded-md border border-line bg-canvas p-2 text-xs text-muted sm:p-3 short:p-1.5!;
+    & b {
+      @apply text-xl sm:text-2xl short:text-lg!;
+    }
+  }
+
+  /* Bordered box grouping related settings */
+  .panel {
+    @apply rounded-lg border border-line bg-panel;
+  }
+
+  /* Small heading of a settings section */
+  .section-title {
+    @apply text-sm font-bold text-fg;
+  }
+
+  /* Round speaker button next to a reading */
+  .icon-btn {
+    @apply inline-flex size-7.5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-line text-[0.9375rem] leading-none hover:border-accent hover:bg-raised;
+  }
+
+  /* Scrollable list table (session words, mistakes): sticky header, row separators */
+  .data-table {
+    @apply w-full border-collapse text-left text-sm;
+    & th {
+      @apply sticky top-0 bg-raised px-2 py-1.5 font-normal text-muted;
+    }
+    & td {
+      @apply px-2 py-1.5;
+    }
+    & tbody tr {
+      @apply border-t border-raised align-top;
+    }
   }
 
   .field-select {

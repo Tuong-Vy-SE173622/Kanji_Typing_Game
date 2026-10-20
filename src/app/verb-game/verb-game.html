@@ -1,0 +1,34 @@
+<header class="mb-3 flex shrink-0 items-center justify-between gap-2">
+  <a routerLink="/" class="btn-ghost">← Chọn game</a>
+  <div class="flex gap-2">
+    <button
+      (click)="sound.toggle()"
+      [title]="sound.enabled() ? 'Tắt âm thanh' : 'Bật âm thanh'"
+      class="btn-ghost"
+    >
+      {{ sound.enabled() ? '🔊' : '🔇' }}
+    </button>
+    <button (click)="showRules.set(true)" class="btn-ghost" title="Bảng quy tắc">
+      📖<span class="hidden sm:inline"> Bảng quy tắc</span>
+    </button>
+  </div>
+</header>
+
+<!-- Scrolls only as a last resort (e.g. landscape phone); screens are sized to fit -->
+<main class="flex min-h-0 flex-1 flex-col justify-center-safe overflow-y-auto">
+  @switch (verb.screen()) {
+    @case ('setup') {
+      <app-verb-setup />
+    }
+    @case ('playing') {
+      <app-verb-play />
+    }
+    @case ('result') {
+      <app-verb-result />
+    }
+  }
+</main>
+
+@if (showRules()) {
+  <app-conjugation-rules-dialog (closed)="showRules.set(false)" />
+}

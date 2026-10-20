@@ -1,0 +1,10 @@
+<!-- Each segment is an element so no whitespace ends up between kanji and kana -->
+@for (s of segments(); track $index) {
+  @if (s.furigana) {
+    <ruby
+      >{{ s.text }}<rt class="text-[0.4em] font-normal text-accent">{{ s.furigana }}</rt></ruby
+    >
+  } @else {
+    <span>{{ s.text }}</span>
+  }
+}

@@ -1,16 +1,1 @@
-@switch (game.phase()) {
-  @case ('menu') {
-    <app-home />
-  }
-  @case ('home') {
-    <app-home-vocabulary-typing-game />
-  }
-  @case ('over') {
-    <app-game-over-dialog />
-  }
-  @case ('complete') {
-    <app-session-complete-dialog />
-  }
-}
-
-<app-game-board />
+<router-outlet />

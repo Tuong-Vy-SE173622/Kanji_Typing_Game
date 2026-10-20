@@ -1,0 +1,89 @@
+<!-- Phones: summary on top, mistakes below. Wide screens: summary left, mistakes fill the right -->
+<div
+  class="flex min-h-0 flex-col gap-3 rounded-lg border-2 border-success bg-panel p-3 text-center sm:gap-5 sm:p-6 split:flex-row split:gap-6 short:gap-3! short:p-3!"
+>
+  <section class="flex shrink-0 flex-col split:w-2/5 split:justify-center">
+    <h2 class="mb-1.5 text-[1.375rem] font-bold text-success short:mb-0 short:text-lg">
+      🏆 KẾT QUẢ
+    </h2>
+    <p class="mb-3 text-[0.8125rem] text-muted sm:mb-5 short:hidden">
+      {{ verb.timeUp() ? 'Hết giờ!' : 'Bạn đã hoàn thành lượt chơi.' }}
+    </p>
+
+    <div
+      class="mb-3 grid grid-cols-2 gap-2 sm:mb-5 sm:grid-cols-4 sm:gap-2.5 split:grid-cols-2! short:mb-2!"
+    >
+      <div class="stat-tile">
+        <span>Tổng điểm</span>
+        <b class="text-accent">{{ verb.score() }}</b>
+      </div>
+      <div class="stat-tile">
+        <span>Đúng / Tổng</span>
+        <b class="text-fg">{{ verb.correctCount() }}/{{ verb.answered() }}</b>
+      </div>
+      <div class="stat-tile">
+        <span>Tỷ lệ đúng</span>
+        <b class="text-success">{{ verb.accuracy() }}%</b>
+      </div>
+      <div class="stat-tile">
+        <span>Combo cao nhất</span>
+        <b class="text-warn">{{ verb.maxStreak() }}</b>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-2.5">
+      <button #againBtn appAutoFocus (click)="verb.start()" class="btn-primary">
+        Chơi lại (Enter)
+      </button>
+      <button (click)="verb.backToSetup()" class="btn-secondary">Đổi cài đặt</button>
+    </div>
+  </section>
+
+  @if (verb.mistakes().length) {
+    <section class="flex min-h-0 min-w-0 flex-1 flex-col">
+      <h3 class="mb-2 shrink-0 text-left text-sm font-bold text-fg">Các câu cần xem lại:</h3>
+      <!-- Takes the remaining height and scrolls, so the card never overflows the screen -->
+      <div
+        class="min-h-24 flex-1 overflow-auto rounded-md border border-line bg-canvas short:min-h-16"
+      >
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Động từ</th>
+              <th class="hidden sm:table-cell">Thể</th>
+              <th>Bạn trả lời</th>
+              <th>Đáp án</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of verb.mistakes(); track $index) {
+              <tr>
+                <td>
+                  <b class="text-enemy">{{ m.question.verb.kanji }}</b>
+                  <span class="block text-xs text-muted">{{ m.question.verb.meaning }}</span>
+                  <!-- Phones: the form goes here instead of its own column -->
+                  <span class="block text-xs text-accent sm:hidden"
+                    >→ {{ m.question.form.short }}</span
+                  >
+                </td>
+                <td class="hidden text-muted sm:table-cell">
+                  {{ m.question.form.name }}
+                </td>
+                <td class="text-danger line-through sm:whitespace-nowrap">
+                  {{ m.given }}
+                </td>
+                <td
+                  title="Nghe phát âm"
+                  (click)="verb.speak(m.question.answer); againBtn.focus()"
+                  class="cursor-pointer font-bold whitespace-nowrap text-success hover:underline"
+                >
+                  {{ m.question.answer }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</div>

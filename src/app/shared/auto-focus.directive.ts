@@ -7,6 +7,6 @@ export class AutoFocusDirective implements AfterViewInit {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
 
   ngAfterViewInit(): void {
-    if (this.appAutoFocus() !== false) this.el.nativeElement.focus();
+    if (this.appAutoFocus() !== false) this.el.nativeElement.focus({ preventScroll: true });
   }
 }

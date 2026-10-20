@@ -1,11 +1,12 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ALL, getVocabPool, LEVELS } from './levels';
+import { shuffle } from './random';
 import { SpeechService } from './speech.service';
 import { Vocab } from './vocab';
 import { parseVocabList } from './vocab-import';
 
-// 'menu' = game picker, 'home' = vocabulary game setup
-export type Phase = 'menu' | 'home' | 'playing' | 'over' | 'complete';
+// 'home' = setup screen of the vocabulary game
+export type Phase = 'home' | 'playing' | 'over' | 'complete';
 
 export const SESSION_SIZES = [ALL, 5, 10, 20] as const;
 export type SessionSize = (typeof SESSION_SIZES)[number]; // ALL = every word in the pool
@@ -28,21 +29,12 @@ const FALL_MS = 11250; // time for a word to reach the floor
 const SPEED = TICK_MS / FALL_MS; // progress per tick
 export const MAX_FAILS = 3;
 
-function shuffle<T>(arr: readonly T[]): T[] {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 @Injectable({ providedIn: 'root' })
 export class GameService {
   private readonly speech = inject(SpeechService);
   private timer: ReturnType<typeof setInterval> | undefined;
 
-  readonly phase = signal<Phase>('menu');
+  readonly phase = signal<Phase>('home');
   readonly sessionSize = signal<SessionSize>(10);
   readonly mode = signal(SESSION_MODES[0]);
 
@@ -120,15 +112,11 @@ export class GameService {
     this.spawn();
   }
 
+  /** Stops the game (if running) and returns to the setup screen. */
   goHome(): void {
     this.stop();
     this.speech.cancel();
     this.phase.set('home');
-  }
-
-  goMenu(): void {
-    this.goHome();
-    this.phase.set('menu');
   }
 
   /** Returns true when the answer was correct. */

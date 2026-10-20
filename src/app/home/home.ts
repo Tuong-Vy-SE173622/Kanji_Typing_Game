@@ -1,13 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AutoFocusDirective } from '../shared/auto-focus.directive';
-import { GameService } from '../shared/game.service';
 
-/** Game picker shown on start: Vocabulary game or Verb conjugation game. */
+/** Game picker (route '/'): Vocabulary game or Verb conjugation game. */
 @Component({
   selector: 'app-home',
-  imports: [AutoFocusDirective],
+  imports: [AutoFocusDirective, RouterLink],
   templateUrl: './home.html',
 })
-export class Home {
-  protected readonly game = inject(GameService);
-}
+export class Home {}
